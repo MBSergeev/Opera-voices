@@ -674,6 +674,7 @@ def an_data_learn():
    return clf
     
 def an_data_use(Filename,clf):
+   print Filename
    data=pd.read_table(Filename+".dat")
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
@@ -719,6 +720,8 @@ def an_data_use(Filename,clf):
    mfcc_tbl_sing=np.empty((0,numberMFCC))
    f0_sm_sing=[]
 
+   f0_sm_m_l=[]
+   harm_m_l=np.empty((0,nHarmonics))
    cnt=0
    for seq in find_seq(f0_sm,0.5):
          #print "cnt=",cnt
@@ -758,12 +761,13 @@ def an_data_use(Filename,clf):
 #             plt.plot((np.arange(nHarmonics)+1)*f0_sm[j],harm_tbl_sm[j,:]-harm_tbl_sm[j,0])
              
          f0_sm_m=np.mean(f0_sm[seq[0]:seq[1]-1])
+         f0_sm_m_l=np.append(f0_sm_m_l,f0_sm_m)
+         
          harm_m = np.mean(harm_tbl_sm[seq[0]:seq[1],:] -  harm_tbl_sm[seq[0]:seq[1],0].reshape(seq[1]-seq[0],1),axis=0)
+         harm_m_l=np.append(harm_m_l,[harm_m],axis=0)
 # middle spectrum
-#         plt.plot((np.arange(nHarmonics)+1)*f0_sm_m,harm_m)
+#         plt.plot((np.arange(nHarmonics)+1)*f0_sm_m,harm_m,color=col)
 
-#         plt.xlim((0,5000))
-#         plt.show()
 #         plt.plot([time[seq[0]],time[seq[0]-t0]],[0,1000],color="g")
 #         plt.plot([time[seq[1]],time[seq[1]]],[0,1000],color="r")
 # the syntesis of sound
@@ -773,13 +777,19 @@ def an_data_use(Filename,clf):
          f0_sm_sing=np.append(f0_sm_sing,f0_sm[seq[0]:seq[1]])
          cnt+=1
 
+#   plt.xlim((0,5000))
+#   plt.show()
+#   plt.hist(f0_sm_m_l)
+#   plt.show()
+
    regr = linear_model.LinearRegression()
    X_train, X_test, y_train, y_test = train_test_split(mfcc_tbl_sing[:,1:10], f0_sm_sing, test_size=0.33, random_state=241)
    regr.fit(X_train,y_train)
 
-   print "Error=",np.sqrt(np.mean((regr.predict(X_test) - y_test) ** 2))
-   plt.scatter(regr.predict(X_test),y_test)
-   plt.show()
+#   print "Error=",np.sqrt(np.mean((regr.predict(X_test) - y_test) ** 2))
+#   plt.scatter(regr.predict(X_test),y_test)
+#   plt.show()
+   return f0_sm_m_l,harm_m_l
 
 nHarmonics=15
 frameSize = 2*1024
@@ -797,30 +807,34 @@ for i in range(nBarkband):
 
 k_t=hopSize/float(sampleRate)
 win_len=199
-#clf=an_data_test("OP_Se_in_ciel.flac")
-#an_data_t("OP_Se_in_ciel.flac",clf)
-#an_data_p("OP_Se_in_ciel.flac")
-#an_data("OP_Se_in_ciel")
-#an_data("OP_Crudele")
-#an_data("OP_Bacio")
-#an_data("OP_Deh_Vieni")
-#an_data("OP_Ah_non_potrian")
-#an_data("OP_Merce_dilette")
-#an_data("OP_Nachtigall")
 
 
 clf=an_data_learn()
-an_data_use("OP_Se_in_ciel",clf)
-#an_data_use("OP_Crudele",clf)
-#an_data_use("OP_Bacio",clf)
-#an_data_use("OP_Deh_Vieni",clf)
-#an_data_use("OP_Ah_non_potrian",clf)
-#an_data_use("OP_Merce_dilette",clf)
-#an_data_use("OP_Nachtigall",clf)
+tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni","OP_Ah_non_potrian","OP_Merce_dilette","OP_Nachtigall","OP_Son_Vergin",
+   "OP_O_legere_hirondelle","OP_Spiel_ich","OP_O_Rendetemi","OP_Villanelle","OP_Ouvre_ton_coer"]
+for tr in tr_lst[0:]:
+    f0,harm = an_data_use(tr,clf)
+    for i in range(len(f0)): 
+        for j in range(len(marg)):
+           if marg[j]>f0[i]:
+              break
+        if j==5:
+            clr='red'
+        elif j==6:
+            clr='orange'
+        elif j==7:
+            clr='yellow'
+        elif j==8:
+            clr='green'
+        elif j==9:
+            clr='lightblue'
+        elif j==10:
+            clr='blue'
+        elif j==11:
+            clr='violet'
+        else:
+            clr='black'
 
-#an_data_use("OP_Son_Vergin",clf)
-#an_data_use("OP_O_legere_hirondelle",clf)
-#an_data_use("OP_Spiel_ich",clf)
-#an_data_use("OP_O_Rendetemi",clf)
-#an_data_use("OP_Villanelle",clf)
-#an_data_use("OP_Ouvre_ton_coer",clf)
+        plt.plot((np.arange(nHarmonics)+1)*f0[i],harm[i],color=clr)
+plt.xlim((0,5000))
+plt.show()
