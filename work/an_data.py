@@ -132,7 +132,7 @@ def smooth(x,window_len=11,window='hanning'):
 
 
 def an_data_test(Filename):
-   data=pd.read_table(Filenaame)
+   data=pd.read_table(dir_data+Filename)
    data_sel=data[data.Filename==Filename]
    time=data_sel.loc[:,"Time"].as_matrix()
    freq=data_sel.loc[:,"Frequency"].as_matrix()
@@ -263,7 +263,7 @@ def an_data_test(Filename):
    plt.show()
 
 def an_data_t(Filename,clf):
-   data=pd.read_table("OP_Se_in_ciel.dat")
+   data=pd.read_table(dir_data+"OP_Se_in_ciel.dat")
    data_sel=data[data.Filename==Filename]
    time=data_sel.loc[:,"Time"].as_matrix()
    freq=data_sel.loc[:,"Frequency"].as_matrix()
@@ -309,7 +309,7 @@ def an_data_t(Filename,clf):
    plt.show()
 
 def an_data_p(Filename):
-   data=pd.read_table("OP_Se_in_ciel.dat")
+   data=pd.read_table(dir_data+"OP_Se_in_ciel.dat")
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
    pitch=data.loc[:,"Pitch"].as_matrix()
@@ -504,7 +504,7 @@ def an_data_p(Filename):
    plt.show()
    """
 def an_data(Filename):
-   data=pd.read_table(Filename+".dat")
+   data=pd.read_table(dir_data+Filename+".dat")
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
    pitch=data.loc[:,"Pitch"].as_matrix()
@@ -635,7 +635,7 @@ def an_data_learn():
    t0=49
    t1=72
 
-   data=pd.read_table("OP_Se_in_ciel.dat")
+   data=pd.read_table(dir_data+"OP_Se_in_ciel.dat")
 
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
@@ -675,7 +675,7 @@ def an_data_learn():
     
 def an_data_use(Filename,clf):
    print Filename
-   data=pd.read_table(Filename+".dat")
+   data=pd.read_table(dir_data+Filename+".dat")
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
    pitch=data.loc[:,"Pitch"].as_matrix()
@@ -861,6 +861,7 @@ sampleRate = 44100
 nBarkband=27
 numberMFCC=16
 marg=[0,50,100,150,200,300,400,510,630,770,920,1080,1270,1480,1720,2000,2320,2700,3150,3700,4400,5300,6400,7700,9500,12000,15500,20500]#,27000]
+dir_data="../data/"
 
 marg_m=[] 
 marg_d=[] 
