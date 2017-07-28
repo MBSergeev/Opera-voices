@@ -810,31 +810,67 @@ win_len=199
 
 
 clf=an_data_learn()
+
 tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni","OP_Ah_non_potrian","OP_Merce_dilette","OP_Nachtigall","OP_Son_Vergin",
    "OP_O_legere_hirondelle","OP_Spiel_ich","OP_O_Rendetemi","OP_Villanelle","OP_Ouvre_ton_coer"]
+
+
+harm_m=np.zeros((nBarkband,nHarmonics))
+cnt_m=np.zeros(nBarkband)
 for tr in tr_lst[0:]:
     f0,harm = an_data_use(tr,clf)
+#    print np.min(f0),np.max(f0)
     for i in range(len(f0)): 
-        for j in range(len(marg)):
-           if marg[j]>f0[i]:
+        for i_m in range(len(marg)):
+           if marg[i_m]>f0[i]:
               break
-        if j==5:
+   
+
+        harm_s=harm_m[i_m-1]
+        harm_s+=harm[i]
+        harm_m[i_m-1]=harm_s
+
+        cnt_m[i_m-1]+=1
+
+
+        if i_m==5:
             clr='red'
-        elif j==6:
+        elif i_m==6:
             clr='orange'
-        elif j==7:
+        elif i_m==7:
             clr='yellow'
-        elif j==8:
+        elif i_m==8:
             clr='green'
-        elif j==9:
+        elif i_m==9:
             clr='lightblue'
-        elif j==10:
+        elif i_m==10:
             clr='blue'
-        elif j==11:
+        elif i_m==11:
             clr='violet'
         else:
             clr='black'
+print "--------"
+for i_m in range(5,nBarkband):
+        if i_m==5:
+            clr='red'
+        elif i_m==6:
+            clr='orange'
+        elif i_m==7:
+            clr='yellow'
+        elif i_m==8:
+            clr='green'
+        elif i_m==9:
+            clr='lightblue'
+        elif i_m==10:
+            clr='blue'
+        elif i_m==11:
+            clr='violet'
+        else:
+            clr='black'
+        if cnt_m[i_m]>0:
+            print i_m,clr,marg_m[i_m],cnt_m[i_m],get_score(marg_m[i_m])[0]
+            harm_m[i_m]=harm_m[i_m]/cnt_m[i_m]
+            plt.plot((np.arange(nHarmonics)+1)*marg_m[i_m],harm_m[i_m],color=clr)
 
-        plt.plot((np.arange(nHarmonics)+1)*f0[i],harm[i],color=clr)
 plt.xlim((0,5000))
 plt.show()
