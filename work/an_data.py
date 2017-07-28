@@ -791,33 +791,11 @@ def an_data_use(Filename,clf):
 #   plt.show()
    return f0_sm_m_l,harm_m_l
 
-nHarmonics=15
-frameSize = 2*1024
-hopSize = 256 
-sampleRate = 44100
-nBarkband=27
-numberMFCC=16
-marg=[0,50,100,150,200,300,400,510,630,770,920,1080,1270,1480,1720,2000,2320,2700,3150,3700,4400,5300,6400,7700,9500,12000,15500,20500]#,27000]
-
-marg_m=[] 
-marg_d=[] 
-for i in range(nBarkband):
-  marg_m=np.append(marg_m,(marg[i]+marg[i+1])/2.0)
-  marg_d=np.append(marg_d,marg[i+1]-marg[i])
-
-k_t=hopSize/float(sampleRate)
-win_len=199
-
-
-clf=an_data_learn()
-
-tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni","OP_Ah_non_potrian","OP_Merce_dilette","OP_Nachtigall","OP_Son_Vergin",
-   "OP_O_legere_hirondelle","OP_Spiel_ich","OP_O_Rendetemi","OP_Villanelle","OP_Ouvre_ton_coer"]
-
-
-harm_m=np.zeros((nBarkband,nHarmonics))
-cnt_m=np.zeros(nBarkband)
-for tr in tr_lst[0:]:
+#Mean spectra in bark-intervals
+def mean_spectra(tr_lst,clf):
+  harm_m=np.zeros((nBarkband,nHarmonics))
+  cnt_m=np.zeros(nBarkband)
+  for tr in tr_lst:
     f0,harm = an_data_use(tr,clf)
 #    print np.min(f0),np.max(f0)
     for i in range(len(f0)): 
@@ -849,8 +827,8 @@ for tr in tr_lst[0:]:
             clr='violet'
         else:
             clr='black'
-print "--------"
-for i_m in range(5,nBarkband):
+  print "--------"
+  for i_m in range(5,nBarkband):
         if i_m==5:
             clr='red'
         elif i_m==6:
@@ -868,9 +846,36 @@ for i_m in range(5,nBarkband):
         else:
             clr='black'
         if cnt_m[i_m]>0:
-            print i_m,clr,marg_m[i_m],cnt_m[i_m],get_score(marg_m[i_m])[0]
+            print i_m,clr,marg_m[i_m],int(cnt_m[i_m]),get_score(marg_m[i_m])[0]
             harm_m[i_m]=harm_m[i_m]/cnt_m[i_m]
             plt.plot((np.arange(nHarmonics)+1)*marg_m[i_m],harm_m[i_m],color=clr)
 
-plt.xlim((0,5000))
-plt.show()
+  plt.xlim((0,5000))
+  plt.show()
+
+
+nHarmonics=15
+frameSize = 2*1024
+hopSize = 256 
+sampleRate = 44100
+nBarkband=27
+numberMFCC=16
+marg=[0,50,100,150,200,300,400,510,630,770,920,1080,1270,1480,1720,2000,2320,2700,3150,3700,4400,5300,6400,7700,9500,12000,15500,20500]#,27000]
+
+marg_m=[] 
+marg_d=[] 
+for i in range(nBarkband):
+  marg_m=np.append(marg_m,(marg[i]+marg[i+1])/2.0)
+  marg_d=np.append(marg_d,marg[i+1]-marg[i])
+
+k_t=hopSize/float(sampleRate)
+win_len=199
+
+
+clf=an_data_learn()
+
+tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni","OP_Ah_non_potrian","OP_Merce_dilette","OP_Nachtigall","OP_Son_Vergin",
+   "OP_O_legere_hirondelle","OP_Spiel_ich","OP_O_Rendetemi","OP_Villanelle","OP_Ouvre_ton_coer"]
+
+mean_spectra(tr_lst,clf)
+
