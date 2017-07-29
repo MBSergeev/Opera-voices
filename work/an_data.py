@@ -717,11 +717,12 @@ def an_data_use(Filename,clf):
    for i in range(numberMFCC):
       mfcc_tbl_sm[:,i]=smooth(mfcc_tbl[:,i],win_len,window='hamming')
 
-   mfcc_tbl_sing=np.empty((0,numberMFCC))
-   f0_sm_sing=[]
+#   mfcc_tbl_sing=np.empty((0,numberMFCC))
+#   f0_sm_sing=[]
 
    f0_sm_m_l=[]
    harm_m_l=np.empty((0,nHarmonics))
+   mfcc_m_l=np.empty((0,numberMFCC))
    cnt=0
    for seq in find_seq(f0_sm,0.5):
          #print "cnt=",cnt
@@ -765,6 +766,11 @@ def an_data_use(Filename,clf):
          
          harm_m = np.mean(harm_tbl_sm[seq[0]:seq[1],:] -  harm_tbl_sm[seq[0]:seq[1],0].reshape(seq[1]-seq[0],1),axis=0)
          harm_m_l=np.append(harm_m_l,[harm_m],axis=0)
+
+         mfcc_m = np.mean(mfcc_tbl_sm[seq[0]:seq[1],:],axis=0)
+         mfcc_m_l=np.append(mfcc_m_l,[mfcc_m],axis=0)
+#         plt.plot(np.arange(numberMFCC-1)+2,mfcc_m[1:])
+
 # middle spectrum
 #         plt.plot((np.arange(nHarmonics)+1)*f0_sm_m,harm_m,color=col)
 
@@ -773,8 +779,8 @@ def an_data_use(Filename,clf):
 # the syntesis of sound
 #         syn_sound(data.loc[seq[0]:seq[1]-1,:],"sounds/"+"%02d" % cnt+"_"+Filename+".wav")
 
-         mfcc_tbl_sing=np.vstack([mfcc_tbl_sing,mfcc_tbl_sm[seq[0]:seq[1],:]]) 
-         f0_sm_sing=np.append(f0_sm_sing,f0_sm[seq[0]:seq[1]])
+#         mfcc_tbl_sing=np.vstack([mfcc_tbl_sing,mfcc_tbl_sm[seq[0]:seq[1],:]]) 
+#         f0_sm_sing=np.append(f0_sm_sing,f0_sm[seq[0]:seq[1]])
          cnt+=1
 
 #   plt.xlim((0,5000))
@@ -782,21 +788,22 @@ def an_data_use(Filename,clf):
 #   plt.hist(f0_sm_m_l)
 #   plt.show()
 
-   regr = linear_model.LinearRegression()
-   X_train, X_test, y_train, y_test = train_test_split(mfcc_tbl_sing[:,1:10], f0_sm_sing, test_size=0.33, random_state=241)
-   regr.fit(X_train,y_train)
+#   regr = linear_model.LinearRegression()
+#   X_train, X_test, y_train, y_test = train_test_split(mfcc_tbl_sing[:,1:10], f0_sm_sing, test_size=0.33, random_state=241)
+#   regr.fit(X_train,y_train)
 
 #   print "Error=",np.sqrt(np.mean((regr.predict(X_test) - y_test) ** 2))
 #   plt.scatter(regr.predict(X_test),y_test)
 #   plt.show()
-   return f0_sm_m_l,harm_m_l
+   return f0_sm_m_l,harm_m_l,mfcc_m_l
 
 #Mean spectra in bark-intervals
 def mean_spectra(tr_lst,clf):
   harm_m=np.zeros((nBarkband,nHarmonics))
   cnt_m=np.zeros(nBarkband)
+  mfcc_m=np.zeros((nBarkband,numberMFCC))
   for tr in tr_lst:
-    f0,harm = an_data_use(tr,clf)
+    f0,harm,mfcc = an_data_use(tr,clf)
 #    print np.min(f0),np.max(f0)
     for i in range(len(f0)): 
         for i_m in range(len(marg)):
@@ -807,6 +814,10 @@ def mean_spectra(tr_lst,clf):
         harm_s=harm_m[i_m-1]
         harm_s+=harm[i]
         harm_m[i_m-1]=harm_s
+
+        mfcc_s=mfcc_m[i_m-1]
+        mfcc_s+=mfcc[i]
+        mfcc_m[i_m-1]=mfcc_s
 
         cnt_m[i_m-1]+=1
 
@@ -851,6 +862,29 @@ def mean_spectra(tr_lst,clf):
             plt.plot((np.arange(nHarmonics)+1)*marg_m[i_m],harm_m[i_m],color=clr)
 
   plt.xlim((0,5000))
+  plt.show()
+
+  for i_m in range(5,nBarkband):
+        if i_m==5:
+            clr='red'
+        elif i_m==6:
+            clr='orange'
+        elif i_m==7:
+            clr='yellow'
+        elif i_m==8:
+            clr='green'
+        elif i_m==9:
+            clr='lightblue'
+        elif i_m==10:
+            clr='blue'
+        elif i_m==11:
+            clr='violet'
+        else:
+            clr='black'
+        if cnt_m[i_m]>0:
+            mfcc_m[i_m]=mfcc_m[i_m]/cnt_m[i_m]
+            plt.plot(np.arange(numberMFCC-1)+2,mfcc_m[i_m,1:],color=clr)
+
   plt.show()
 
 
