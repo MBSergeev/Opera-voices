@@ -5,11 +5,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-def harm_anal(inputFilename):
+def harm_anal(dir_in_sound,dir_out_sound,inputFilename):
 
-   loader = MonoLoader(filename = inputFilename, sampleRate = sampleRate )
-   audioWriterOut = MonoWriter(filename=inputFilename[0:-5]+"_out.wav")
-   audioWriterHarm = MonoWriter(filename=inputFilename[0:-5]+"_harm.wav")
+   loader = MonoLoader(filename = dir_in_sound+inputFilename, sampleRate = sampleRate )
+   audioWriterOut = MonoWriter(filename=dir_out_sound+inputFilename[0:-5]+"_out.wav")
+   audioWriterHarm = MonoWriter(filename=dir_out_sound+inputFilename[0:-5]+"_harm.wav")
 
    sct=SpectralCentroidTime(sampleRate=sampleRate)
    bb=BarkBands(sampleRate=sampleRate)
@@ -99,6 +99,11 @@ stocf = 0.2
 numberMFCC=16
 nBarkband=27
 
+
+dir_in_sound="../in_sound/"
+dir_out_sound="../out_sound/"
+dir_data="../data/"
+
 #outputFile="OP_Se_in_ciel"
 #outputFile="OP_Crudele"
 #outputFile="OP_Bacio"
@@ -112,7 +117,7 @@ nBarkband=27
 #outputFile="OP_Villanelle"
 outputFile="OP_Spiel_ich"
 
-outputFilename=outputFile+".dat"
+outputFilename=dir_data+outputFile+".dat"
 
     
 fp=open(outputFilename,"w")
@@ -135,4 +140,4 @@ fp.write("\n")
 fp.close()
 
 
-harm_anal(outputFile+".flac")
+harm_anal(dir_in_sound,dir_out_sound,outputFile+".flac")
