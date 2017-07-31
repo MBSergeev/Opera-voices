@@ -13,13 +13,14 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 
 from utils import *
+from my_cons import my_cons
 
 
 def an_data_learn():
    t0=49
    t1=72
 
-   data=pd.read_table(dir_data+"OP_Se_in_ciel.dat")
+   data=pd.read_table(my_c.dir_data+"OP_Se_in_ciel.dat")
 
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
@@ -30,7 +31,7 @@ def an_data_learn():
    f0_sm=smooth(freq,win_len,window='hamming')
 
    mfcc_lst=[]
-   for i in range(numberMFCC):
+   for i in range(my_c.numberMFCC):
       mfcc_lst.append("MFCC1_"+str(i))
 
    mfcc_tbl=data.loc[:,mfcc_lst].as_matrix()
@@ -59,7 +60,7 @@ def an_data_learn():
     
 def an_data_use(Filename,clf):
    print Filename
-   data=pd.read_table(dir_data+Filename+".dat")
+   data=pd.read_table(my_c.dir_data+Filename+".dat")
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
    pitch=data.loc[:,"Pitch"].as_matrix()
@@ -68,11 +69,11 @@ def an_data_use(Filename,clf):
    f0_sm=smooth(freq,win_len,window='hamming')
 
    mfcc_lst=[]
-   for i in range(numberMFCC):
+   for i in range(my_c.numberMFCC):
       mfcc_lst.append("MFCC1_"+str(i))
 
    harm_lst=[]
-   for i in range(nHarmonics):
+   for i in range(my_c.nHarmonics):
       harm_lst.append("Harm_"+str(i))
 
    mfcc_tbl=data.loc[:,mfcc_lst].as_matrix()
@@ -94,19 +95,19 @@ def an_data_use(Filename,clf):
    harm_tbl=data.loc[:,harm_lst].as_matrix()
 
    harm_tbl_sm=np.empty(harm_tbl.shape)
-   for i in range(nHarmonics):
+   for i in range(my_c.nHarmonics):
       harm_tbl_sm[:,i]=smooth(harm_tbl[:,i],win_len,window='hamming')
 
    mfcc_tbl_sm=np.empty(mfcc_tbl.shape)
-   for i in range(numberMFCC):
+   for i in range(my_c.numberMFCC):
       mfcc_tbl_sm[:,i]=smooth(mfcc_tbl[:,i],win_len,window='hamming')
 
 #   mfcc_tbl_sing=np.empty((0,numberMFCC))
 #   f0_sm_sing=[]
 
    f0_sm_m_l=[]
-   harm_m_l=np.empty((0,nHarmonics))
-   mfcc_m_l=np.empty((0,numberMFCC))
+   harm_m_l=np.empty((0,my_c.nHarmonics))
+   mfcc_m_l=np.empty((0,my_c.numberMFCC))
    cnt=0
    for seq in find_seq(f0_sm,0.5):
          #print "cnt=",cnt
@@ -183,15 +184,15 @@ def an_data_use(Filename,clf):
 
 #Mean spectra in bark-intervals
 def mean_spectra(tr_lst,clf):
-  harm_m=np.zeros((nBarkband,nHarmonics))
-  cnt_m=np.zeros(nBarkband)
-  mfcc_m=np.zeros((nBarkband,numberMFCC))
+  harm_m=np.zeros((my_c.nBarkband,my_c.nHarmonics))
+  cnt_m=np.zeros(my_c.nBarkband)
+  mfcc_m=np.zeros((my_c.nBarkband,my_c.numberMFCC))
   for tr in tr_lst:
     f0,harm,mfcc = an_data_use(tr,clf)
 #    print np.min(f0),np.max(f0)
     for i in range(len(f0)): 
-        for i_m in range(len(marg)):
-           if marg[i_m]>f0[i]:
+        for i_m in range(len(my_c.marg)):
+           if my_c.marg[i_m]>f0[i]:
               break
    
 
@@ -223,7 +224,7 @@ def mean_spectra(tr_lst,clf):
         else:
             clr='black'
   print "--------"
-  for i_m in range(5,nBarkband):
+  for i_m in range(5,my_c.nBarkband):
         if i_m==5:
             clr='red'
         elif i_m==6:
@@ -243,12 +244,12 @@ def mean_spectra(tr_lst,clf):
         if cnt_m[i_m]>0:
             print i_m,clr,marg_m[i_m],int(cnt_m[i_m]),get_score(marg_m[i_m])[0]
             harm_m[i_m]=harm_m[i_m]/cnt_m[i_m]
-            plt.plot((np.arange(nHarmonics)+1)*marg_m[i_m],harm_m[i_m],color=clr)
+            plt.plot((np.arange(my_c.nHarmonics)+1)*marg_m[i_m],harm_m[i_m],color=clr)
 
   plt.xlim((0,5000))
   plt.show()
 
-  for i_m in range(5,nBarkband):
+  for i_m in range(5,my_c.nBarkband):
         if i_m==5:
             clr='red'
         elif i_m==6:
@@ -267,27 +268,19 @@ def mean_spectra(tr_lst,clf):
             clr='black'
         if cnt_m[i_m]>0:
             mfcc_m[i_m]=mfcc_m[i_m]/cnt_m[i_m]
-            plt.plot(np.arange(numberMFCC-1)+2,mfcc_m[i_m,1:],color=clr)
+            plt.plot(np.arange(my_c.numberMFCC-1)+2,mfcc_m[i_m,1:],color=clr)
 
   plt.show()
 
-
-nHarmonics=15
-frameSize = 2*1024
-hopSize = 256 
-sampleRate = 44100
-nBarkband=27
-numberMFCC=16
-marg=[0,50,100,150,200,300,400,510,630,770,920,1080,1270,1480,1720,2000,2320,2700,3150,3700,4400,5300,6400,7700,9500,12000,15500,20500]#,27000]
-dir_data="../data/"
+my_c=my_cons()
 
 marg_m=[] 
 marg_d=[] 
-for i in range(nBarkband):
-  marg_m=np.append(marg_m,(marg[i]+marg[i+1])/2.0)
-  marg_d=np.append(marg_d,marg[i+1]-marg[i])
+for i in range(my_c.nBarkband):
+  marg_m=np.append(marg_m,(my_c.marg[i]+my_c.marg[i+1])/2.0)
+  marg_d=np.append(marg_d,my_c.marg[i+1]-my_c.marg[i])
 
-k_t=hopSize/float(sampleRate)
+k_t=my_c.hopSize/float(my_c.sampleRate)
 win_len=199
 
 

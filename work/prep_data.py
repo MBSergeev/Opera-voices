@@ -5,29 +5,34 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
+from my_cons import my_cons
+
 def harm_anal(dir_in_sound,dir_out_sound,inputFilename):
 
-   loader = MonoLoader(filename = dir_in_sound+inputFilename, sampleRate = sampleRate )
+   loader = MonoLoader(filename = my_c.dir_in_sound+inputFilename, sampleRate = my_c.sampleRate )
    audioWriterOut = MonoWriter(filename=dir_out_sound+inputFilename[0:-5]+"_out.wav")
    audioWriterHarm = MonoWriter(filename=dir_out_sound+inputFilename[0:-5]+"_harm.wav")
 
-   sct=SpectralCentroidTime(sampleRate=sampleRate)
-   bb=BarkBands(sampleRate=sampleRate)
+   sct=SpectralCentroidTime(sampleRate=my_c.sampleRate)
+   bb=BarkBands(sampleRate=my_c.sampleRate)
 
    equalLoudness = EqualLoudness()
-   predominantMelody=PredominantPitchMelodia(frameSize=frameSize,hopSize=hopSize,sampleRate=sampleRate,\
+   predominantMelody=PredominantPitchMelodia(frameSize=my_c.frameSize,hopSize=my_c.hopSize,sampleRate=my_c.sampleRate,\
 
       filterIterations=3,voicingTolerance=0.2,voiceVibrato=True,minFrequency=80,guessUnvoiced=False)
 
-   hma=HprModelAnal(sampleRate=sampleRate,hopSize=hopSize,fftSize=frameSize,nHarmonics=nHarmonics, maxnSines=maxnSines,freqDevOffset=freqDevOffset,freqDevSlope=freqDevSlope,harmDevSlope=harmDevSlope,magnitudeThreshold=magnitudeThreshold,maxFrequency=maxFrequency,maxPeaks=maxPeaks,minFrequency=minFrequency,stocf=stocf) 
+   hma=HprModelAnal(sampleRate=my_c.sampleRate,hopSize=my_c.hopSize,fftSize=my_c.frameSize,nHarmonics=my_c.nHarmonics, \
+      maxnSines=my_c.maxnSines,freqDevOffset=my_c.freqDevOffset,freqDevSlope=my_c.freqDevSlope,harmDevSlope=my_c.harmDevSlope,\
+      magnitudeThreshold=my_c.magnitudeThreshold,maxFrequency=my_c.maxFrequency,maxPeaks=my_c.maxPeaks,\
+      minFrequency=my_c.minFrequency,stocf=my_c.stocf) 
 
-   sms=SprModelSynth(sampleRate=sampleRate,hopSize=hopSize,fftSize=frameSize)
+   sms=SprModelSynth(sampleRate=my_c.sampleRate,hopSize=my_c.hopSize,fftSize=my_c.frameSize)
    window =Windowing(type='hamming')
-   spectrum=Spectrum(size=frameSize)
+   spectrum=Spectrum(size=my_c.frameSize)
 
-   mfcc=MFCC(numberCoefficients=numberMFCC,inputSize=frameSize/2+1)
+   mfcc=MFCC(numberCoefficients=my_c.numberMFCC,inputSize=my_c.frameSize/2+1)
 
-   k_t=hopSize/float(sampleRate)
+   k_t=my_c.hopSize/float(my_c.sampleRate)
 
    audio=loader()
    eqaudio=equalLoudness(audio)
@@ -38,7 +43,7 @@ def harm_anal(dir_in_sound,dir_out_sound,inputFilename):
    fp=open(outputFilename,"a")
 
    nFrames=pitch.shape[0]
-   for frame in FrameGenerator(audio, frameSize, hopSize, startFromZero=False):
+   for frame in FrameGenerator(audio, my_c.frameSize, my_c.hopSize, startFromZero=False):
       if cnt%1000==0:
           print cnt,nFrames
       spect=spectrum(window(frame))
@@ -49,7 +54,7 @@ def harm_anal(dir_in_sound,dir_out_sound,inputFilename):
           frequencies[i]=frequencies[0]*(i+1)
       spect1=np.zeros(spect.shape)
       for i in range(len(magnitudes)):
-          spect1[int(frequencies[i]*frameSize/sampleRate)]=10**(magnitudes[i]/20)
+          spect1[int(frequencies[i]*my_c.frameSize/my_c.sampleRate)]=10**(magnitudes[i]/20)
       barkbands1=bb(es.array(spect1))  
       barkbands=bb(es.array(spect)) 
       mfcc_bands,mfcc_coeffs=mfcc(spect)
@@ -58,17 +63,17 @@ def harm_anal(dir_in_sound,dir_out_sound,inputFilename):
 #      audioout1 = np.append(audioout1,outframe)
 #     audioout2 = np.append(audioout2,harmframe)
       fp.write(inputFilename+"\t"+inputFilename[0:2]+"\t"+str(frequencies[0])+"\t"+str(pitch[cnt])+"\t"+str(k_t*cnt)+"\t"+str(centroid))
-      for j in range(nHarmonics):
+      for j in range(my_c.nHarmonics):
          fp.write("\t"+str(magnitudes[j]))
-      for j in range(nHarmonics):
+      for j in range(my_c.nHarmonics):
          fp.write("\t"+str(phases[j]))
-      for j in range(numberMFCC):
+      for j in range(my_c.numberMFCC):
          fp.write("\t"+str(mfcc_coeffs[j]))
-      for j in range(numberMFCC):
+      for j in range(my_c.numberMFCC):
          fp.write("\t"+str(mfcc_coeffs1[j]))
-      for j in range(nBarkband):
+      for j in range(my_c.nBarkband):
          fp.write("\t"+str(barkbands[j]))
-      for j in range(nBarkband):
+      for j in range(my_c.nBarkband):
          fp.write("\t"+str(barkbands1[j]))
 
       fp.write("\n")
@@ -83,26 +88,6 @@ def harm_anal(dir_in_sound,dir_out_sound,inputFilename):
 #   plt.plot(t_arr,allFrequencies[:,0],'b')
 #   plt.show()
 
-frameSize = 2*1024
-hopSize = 256 
-sampleRate = 44100
-nHarmonics=15
-freqDevOffset=20
-freqDevSlope=0.01
-harmDevSlope=0.01
-magnitudeThreshold =0
-maxFrequency=15000
-maxPeaks=100
-maxnSines=100
-minFrequency=20
-stocf = 0.2
-numberMFCC=16
-nBarkband=27
-
-
-dir_in_sound="../in_sound/"
-dir_out_sound="../out_sound/"
-dir_data="../data/"
 
 #outputFile="OP_Se_in_ciel"
 #outputFile="OP_Crudele"
@@ -117,27 +102,29 @@ dir_data="../data/"
 #outputFile="OP_Villanelle"
 outputFile="OP_Spiel_ich"
 
-outputFilename=dir_data+outputFile+".dat"
+my_c= my_cons()
+
+outputFilename=my_c.dir_data+outputFile+".dat"
 
     
 fp=open(outputFilename,"w")
 
 fp.write("Filename\tSinger\tFrequency\tPitch\tTime\tCentroid")
-for i in range(nHarmonics):
+for i in range(my_c.nHarmonics):
    fp.write("\tHarm_"+str(i))
-for i in range(nHarmonics):
+for i in range(my_c.nHarmonics):
    fp.write("\tPhase_"+str(i))
-for i in range(numberMFCC):
+for i in range(my_c.numberMFCC):
    fp.write("\tMFCC_"+str(i))
-for i in range(numberMFCC):
+for i in range(my_c.numberMFCC):
    fp.write("\tMFCC1_"+str(i))
-for i in range(nBarkband):
+for i in range(my_c.nBarkband):
    fp.write("\tBarkband_"+str(i))
-for i in range(nBarkband):
+for i in range(my_c.nBarkband):
    fp.write("\tBarkband1_"+str(i))
 
 fp.write("\n")
 fp.close()
 
 
-harm_anal(dir_in_sound,dir_out_sound,outputFile+".flac")
+harm_anal(my_c.dir_in_sound,my_c.dir_out_sound,outputFile+".flac")

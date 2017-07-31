@@ -8,13 +8,14 @@ from sklearn import linear_model
 from sklearn.metrics import accuracy_score
 
 from utils import *
+from my_cons import my_cons
 
 
 def an_data_learn():
    t0=49
    t1=72
 
-   data=pd.read_table(dir_data+"OP_Se_in_ciel.dat")
+   data=pd.read_table(my_c.dir_data+"OP_Se_in_ciel.dat")
 
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
@@ -25,7 +26,7 @@ def an_data_learn():
    f0_sm=smooth(freq,win_len,window='hamming')
 
    mfcc_lst=[]
-   for i in range(numberMFCC):
+   for i in range(my_c.numberMFCC):
       mfcc_lst.append("MFCC1_"+str(i))
 
    mfcc_tbl=data.loc[:,mfcc_lst].as_matrix()
@@ -50,7 +51,7 @@ def an_data_learn():
 
 def an_data_use(Filename,clf):
    print Filename
-   data=pd.read_table(dir_data+Filename+".dat")
+   data=pd.read_table(my_c.dir_data+Filename+".dat")
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
    pitch=data.loc[:,"Pitch"].as_matrix()
@@ -59,7 +60,7 @@ def an_data_use(Filename,clf):
    f0_sm=smooth(freq,win_len,window='hamming')
 
    mfcc_lst=[]
-   for i in range(numberMFCC):
+   for i in range(my_c.numberMFCC):
       mfcc_lst.append("MFCC1_"+str(i))
 
    mfcc_tbl=data.loc[:,mfcc_lst].as_matrix()
@@ -80,20 +81,13 @@ def an_data_use(Filename,clf):
    cnt=0
    for seq in find_seq(f0_sm,0.5):
       print cnt
-      syn_sound(data.loc[seq[0]:seq[1]-1,:],dir_out_sound+Filename+"_"+"%02d" % cnt+".wav")
+      syn_sound(data.loc[seq[0]:seq[1]-1,:],my_c.dir_out_sound+Filename+"_"+"%02d" % cnt+".wav")
       cnt+=1
 
 
-
-dir_data="../data/"
-dir_out_sound="../out_sound/"
 win_len=199
-numberMFCC=16
-hopSize = 256
-sampleRate = 44100
-frameSize = 2*1024
-nHarmonics=15
 
+my_c=my_cons()
 
 
 clf=an_data_learn()
