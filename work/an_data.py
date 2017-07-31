@@ -28,7 +28,7 @@ def an_data_learn():
 
    pitch[pitch==0]=np.nan
    freq[freq==0]=np.nan
-   f0_sm=smooth(freq,win_len,window='hamming')
+   f0_sm=smooth(freq,my_c.win_len,window='hamming')
 
    mfcc_lst=[]
    for i in range(my_c.numberMFCC):
@@ -66,7 +66,7 @@ def an_data_use(Filename,clf):
    pitch=data.loc[:,"Pitch"].as_matrix()
    pitch[pitch==0]=np.nan
    freq[freq==0]=np.nan
-   f0_sm=smooth(freq,win_len,window='hamming')
+   f0_sm=smooth(freq,my_c.win_len,window='hamming')
 
    mfcc_lst=[]
    for i in range(my_c.numberMFCC):
@@ -96,11 +96,11 @@ def an_data_use(Filename,clf):
 
    harm_tbl_sm=np.empty(harm_tbl.shape)
    for i in range(my_c.nHarmonics):
-      harm_tbl_sm[:,i]=smooth(harm_tbl[:,i],win_len,window='hamming')
+      harm_tbl_sm[:,i]=smooth(harm_tbl[:,i],my_c.win_len,window='hamming')
 
    mfcc_tbl_sm=np.empty(mfcc_tbl.shape)
    for i in range(my_c.numberMFCC):
-      mfcc_tbl_sm[:,i]=smooth(mfcc_tbl[:,i],win_len,window='hamming')
+      mfcc_tbl_sm[:,i]=smooth(mfcc_tbl[:,i],my_c.win_len,window='hamming')
 
 #   mfcc_tbl_sing=np.empty((0,numberMFCC))
 #   f0_sm_sing=[]
@@ -224,6 +224,13 @@ def mean_spectra(tr_lst,clf):
         else:
             clr='black'
   print "--------"
+
+  marg_m=[]
+  marg_d=[]
+  for i in range(my_c.nBarkband):
+    marg_m=np.append(marg_m,(my_c.marg[i]+my_c.marg[i+1])/2.0)
+    marg_d=np.append(marg_d,my_c.marg[i+1]-my_c.marg[i])
+
   for i_m in range(5,my_c.nBarkband):
         if i_m==5:
             clr='red'
@@ -273,16 +280,6 @@ def mean_spectra(tr_lst,clf):
   plt.show()
 
 my_c=my_cons()
-
-marg_m=[] 
-marg_d=[] 
-for i in range(my_c.nBarkband):
-  marg_m=np.append(marg_m,(my_c.marg[i]+my_c.marg[i+1])/2.0)
-  marg_d=np.append(marg_d,my_c.marg[i+1]-my_c.marg[i])
-
-k_t=my_c.hopSize/float(my_c.sampleRate)
-win_len=199
-
 
 clf=an_data_learn()
 
