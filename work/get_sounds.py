@@ -23,7 +23,7 @@ def an_data_learn():
 
    pitch[pitch==0]=np.nan
    freq[freq==0]=np.nan
-   f0_sm=smooth(freq,win_len,window='hamming')
+   f0_sm=smooth(freq,my_c.win_len,window='hamming')
 
    mfcc_lst=[]
    for i in range(my_c.numberMFCC):
@@ -57,7 +57,7 @@ def an_data_use(Filename,clf):
    pitch=data.loc[:,"Pitch"].as_matrix()
    pitch[pitch==0]=np.nan
    freq[freq==0]=np.nan
-   f0_sm=smooth(freq,win_len,window='hamming')
+   f0_sm=smooth(freq,my_c.win_len,window='hamming')
 
    mfcc_lst=[]
    for i in range(my_c.numberMFCC):
@@ -85,7 +85,6 @@ def an_data_use(Filename,clf):
       cnt+=1
 
 
-win_len=199
 
 my_c=my_cons()
 
