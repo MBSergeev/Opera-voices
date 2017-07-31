@@ -7,7 +7,7 @@ import sys
 
 from my_cons import my_cons
 
-def harm_anal(dir_in_sound,dir_out_sound,inputFilename):
+def harm_anal(dir_in_sound,dir_out_sound,inputFilename,outputFilename):
 
    loader = MonoLoader(filename = my_c.dir_in_sound+inputFilename, sampleRate = my_c.sampleRate )
    audioWriterOut = MonoWriter(filename=dir_out_sound+inputFilename[0:-5]+"_out.wav")
@@ -18,7 +18,6 @@ def harm_anal(dir_in_sound,dir_out_sound,inputFilename):
 
    equalLoudness = EqualLoudness()
    predominantMelody=PredominantPitchMelodia(frameSize=my_c.frameSize,hopSize=my_c.hopSize,sampleRate=my_c.sampleRate,\
-
       filterIterations=3,voicingTolerance=0.2,voiceVibrato=True,minFrequency=80,guessUnvoiced=False)
 
    hma=HprModelAnal(sampleRate=my_c.sampleRate,hopSize=my_c.hopSize,fftSize=my_c.frameSize,nHarmonics=my_c.nHarmonics, \
@@ -88,6 +87,27 @@ def harm_anal(dir_in_sound,dir_out_sound,inputFilename):
 #   plt.plot(t_arr,allFrequencies[:,0],'b')
 #   plt.show()
 
+def write_head(outputFilename):
+
+   fp=open(outputFilename,"w")
+
+   fp.write("Filename\tSinger\tFrequency\tPitch\tTime\tCentroid")
+   for i in range(my_c.nHarmonics):
+      fp.write("\tHarm_"+str(i))
+   for i in range(my_c.nHarmonics):
+      fp.write("\tPhase_"+str(i))
+   for i in range(my_c.numberMFCC):
+      fp.write("\tMFCC_"+str(i))
+   for i in range(my_c.numberMFCC):
+      fp.write("\tMFCC1_"+str(i))
+   for i in range(my_c.nBarkband):
+      fp.write("\tBarkband_"+str(i))
+   for i in range(my_c.nBarkband):
+      fp.write("\tBarkband1_"+str(i))
+
+   fp.write("\n")
+   fp.close()
+
 
 #outputFile="OP_Se_in_ciel"
 #outputFile="OP_Crudele"
@@ -104,27 +124,6 @@ outputFile="OP_Spiel_ich"
 
 my_c= my_cons()
 
-outputFilename=my_c.dir_data+outputFile+".dat"
-
+write_head(my_c.dir_data+outputFile+".dat")
     
-fp=open(outputFilename,"w")
-
-fp.write("Filename\tSinger\tFrequency\tPitch\tTime\tCentroid")
-for i in range(my_c.nHarmonics):
-   fp.write("\tHarm_"+str(i))
-for i in range(my_c.nHarmonics):
-   fp.write("\tPhase_"+str(i))
-for i in range(my_c.numberMFCC):
-   fp.write("\tMFCC_"+str(i))
-for i in range(my_c.numberMFCC):
-   fp.write("\tMFCC1_"+str(i))
-for i in range(my_c.nBarkband):
-   fp.write("\tBarkband_"+str(i))
-for i in range(my_c.nBarkband):
-   fp.write("\tBarkband1_"+str(i))
-
-fp.write("\n")
-fp.close()
-
-
-harm_anal(my_c.dir_in_sound,my_c.dir_out_sound,outputFile+".flac")
+harm_anal(my_c.dir_in_sound,my_c.dir_out_sound,outputFile+".flac",my_c.dir_data+outputFile+".dat")
