@@ -96,7 +96,9 @@ my_c=my_cons()
 
 
 clf=an_data_learn()
-an_data_use("OP_Se_in_ciel",clf)
+#an_data_use("OP_Se_in_ciel",clf)
 # Write all sound
-#an_data_use("OP_Se_in_ciel",clf,all_data=True)
+#an_data_use("OP_Ludmila",clf,all_data=True)
+#an_data_use("OP_Ludmila",clf)
+an_data_use("OP_Shemahanskaya_zarica",clf,all_data=True)
 

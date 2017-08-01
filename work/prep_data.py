@@ -43,7 +43,7 @@ def harm_anal(dir_in_sound,dir_out_sound,inputFilename,outputFilename):
 
    nFrames=pitch.shape[0]
    for frame in FrameGenerator(audio, my_c.frameSize, my_c.hopSize, startFromZero=False):
-      if cnt%1000==0:
+      if cnt%10000==0:
           print cnt,nFrames
       spect=spectrum(window(frame))
       centroid=sct(frame)
@@ -120,7 +120,9 @@ def write_head(outputFilename):
 #outputFile="OP_O_legere_hirondelle"
 #outputFile="OP_Ouvre_ton_coer"
 #outputFile="OP_Villanelle"
-outputFile="OP_Spiel_ich"
+#outputFile="OP_Spiel_ich"
+outputFile="OP_Ludmila"
+outputFile="OP_Shemahanskaya_zarica"
 
 my_c= my_cons()
 
