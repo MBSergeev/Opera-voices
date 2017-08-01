@@ -49,9 +49,15 @@ def an_data_learn():
    print "log-regression MFCC1",accuracy_score(y_test,y_pred)
    return clf
 
-def an_data_use(Filename,clf):
+def an_data_use(Filename,clf,all_data=False):
    print Filename
    data=pd.read_table(my_c.dir_data+Filename+".dat")
+
+   if all_data:
+        syn_sound(data,my_c.dir_out_sound+Filename+"_out.wav")
+        return
+
+
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
    pitch=data.loc[:,"Pitch"].as_matrix()
@@ -91,4 +97,6 @@ my_c=my_cons()
 
 clf=an_data_learn()
 an_data_use("OP_Se_in_ciel",clf)
+# Write all sound
+#an_data_use("OP_Se_in_ciel",clf,True)
 

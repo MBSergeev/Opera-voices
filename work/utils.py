@@ -137,6 +137,8 @@ def syn_sound(data,name):
       phase_lst=np.append(magn_lst,"Phase_"+str(i))
 
    for cnt in range(data.shape[0]):
+       if cnt>0 and cnt%10000==0:
+          print cnt,data.shape[0]
        dt=data.iloc[cnt,:]
        magn=dt[magn_lst]
        phase=dt[phase_lst]
