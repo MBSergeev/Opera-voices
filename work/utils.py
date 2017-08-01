@@ -1,11 +1,14 @@
 import numpy as np
 import essentia as es
 from essentia.standard import *
+from my_cons import my_cons
 
-hopSize = 256
-sampleRate = 44100
-frameSize = 2*1024
-nHarmonics=15
+my_c=my_cons()
+
+hopSize = my_c.hopSize
+sampleRate = my_c.sampleRate
+frameSize = my_c.frameSize
+nHarmonics=my_c.nHarmonics
 
 def find_seq(seq,dt=0.5):
    k_t=hopSize/float(sampleRate)
