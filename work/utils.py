@@ -128,13 +128,15 @@ def syn_sound(data,name):
    ifft=IFFT(size=frameSize)
    overlapAdd = OverlapAdd(frameSize=frameSize, hopSize=hopSize,  gain=1./frameSize)
    audioWriter = MonoWriter(filename=name)
-   audioout=[]
    magn_lst=[]
    phase_lst=[]
 
    for i in range(nHarmonics):
       magn_lst=np.append(magn_lst,"Harm_"+str(i))
       phase_lst=np.append(magn_lst,"Phase_"+str(i))
+
+   pool=es.Pool()
+
 
    for cnt in range(data.shape[0]):
        if cnt>0 and cnt%10000==0:
@@ -143,13 +145,14 @@ def syn_sound(data,name):
        magn=dt[magn_lst]
        phase=dt[phase_lst]
        freq=[]
-       for j in range(nHarmonics):
-          fr0=dt['Frequency']
-          freq=np.append(freq,fr0*(j+1))
+       fr0=dt['Frequency']
+       freq=fr0*(np.arange(nHarmonics)+1)
        sfftframe=sinemodelsynth(es.array(magn),es.array(freq),es.array(phase))
        ifftframe=ifft(sfftframe)
        out=overlapAdd(ifftframe)
-       audioout = np.append(audioout,out)
+       pool.add('frames',out)
+
+   audioout = pool['frames'].flatten()
 
 # Write to file
    audioWriter(audioout.astype(np.float32))
