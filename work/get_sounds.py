@@ -11,11 +11,9 @@ from utils import *
 from my_cons import my_cons
 
 
-def an_data_learn():
-   t0=49
-   t1=72
+def an_data_learn(Filename="OP_Se_in_ciel.dat",t0=49,t1=72):
 
-   data=pd.read_table(my_c.dir_data+"OP_Se_in_ciel.dat")
+   data=pd.read_table(my_c.dir_data+Filename)
 
    time=data.loc[:,"Time"].as_matrix()
    freq=data.loc[:,"Frequency"].as_matrix()
@@ -97,8 +95,10 @@ my_c=my_cons()
 
 clf=an_data_learn()
 #an_data_use("OP_Se_in_ciel",clf)
+#an_data_use("OP_Se_in_ciel",clf,True)
 # Write all sound
-#an_data_use("OP_Ludmila",clf,all_data=True)
 #an_data_use("OP_Ludmila",clf)
-an_data_use("OP_Shemahanskaya_zarica",clf,all_data=True)
+#an_data_use("OP_Ludmila",clf,all_data=True)
+#an_data_use("OP_Shemahanskaya_zarica",clf,all_data=True)
+an_data_use("OP_Shemahanskaya_zarica",clf)
 
