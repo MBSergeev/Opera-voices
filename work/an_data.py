@@ -180,7 +180,7 @@ def an_data_use(Filename,clf):
    return f0_sm_m_l,harm_m_l,mfcc_m_l
 
 #Mean spectra in bark-intervals
-def mean_spectra(tr_lst,clf):
+def mean_spectra(tr_lst,clf,label,FileNameOut):
   harm_m=np.zeros((my_c.nBarkband,my_c.nHarmonics))
   cnt_m=np.zeros(my_c.nBarkband)
   mfcc_m=np.zeros((my_c.nBarkband,my_c.numberMFCC))
@@ -222,11 +222,14 @@ def mean_spectra(tr_lst,clf):
             clr='black'
   print "--------"
 
+  fp=open(FileNameOut,"a")
+
   marg_m=[]
   marg_d=[]
   for i in range(my_c.nBarkband):
     marg_m=np.append(marg_m,(my_c.marg[i]+my_c.marg[i+1])/2.0)
     marg_d=np.append(marg_d,my_c.marg[i+1]-my_c.marg[i])
+
 
   for i_m in range(5,my_c.nBarkband):
         if i_m==5:
@@ -249,9 +252,17 @@ def mean_spectra(tr_lst,clf):
             print i_m,clr,marg_m[i_m],int(cnt_m[i_m]),get_score(marg_m[i_m])[0]
             harm_m[i_m]=harm_m[i_m]/cnt_m[i_m]
             plt.plot((np.arange(my_c.nHarmonics)+1)*marg_m[i_m],harm_m[i_m],color=clr)
+            for i_h in range(my_c.nHarmonics):
+               if (i_h+1)*marg_m[i_m]>7000:
+                   break
+               fp.write(label+"\t"+str(i_m)+"\t"+\
+                  get_score(marg_m[i_m])[0]+"\t"+\
+                  str(marg_m[i_m])+"\t"+str((i_h+1)*marg_m[i_m])+"\t"+\
+                  str(harm_m[i_m,i_h])+"\n")
 
   plt.xlim((0,5000))
   plt.show()
+  fp.close()
 
   for i_m in range(5,my_c.nBarkband):
         if i_m==5:
@@ -280,17 +291,22 @@ my_c=my_cons()
 
 clf=an_data_learn()
 
+FileNameOut=my_c.dir_data+"harm.dat"
+fp=open(FileNameOut,"w")
+fp.write("label\tnumber\tpitch\tfrequency_0\tfrequency\tharmonic\n")
+fp.close()
+
 tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni",\
     "OP_Ah_non_potrian","OP_Merce_dilette","OP_Nachtigall","OP_Son_Vergin",\
     "OP_O_legere_hirondelle","OP_Spiel_ich","OP_O_Rendetemi",
     "OP_Villanelle","OP_Ouvre_ton_coer"]
 
-mean_spectra(tr_lst,clf)
+mean_spectra(tr_lst,clf,"Arabesque",FileNameOut)
 
 tr_lst=["OP_Ludmila","OP_Shemahanskaya_zarica","OP_Snegurochka",\
    "OP_Volhova","OP_Zarskaya_nevesta","OP_Plenivshis_rozoj",\
     "OP_Eshchyo_v_polyakh","OP_Vocalise","OP_Ne_poy","OP_Zdes_khorosho",\
     "OP_Nightingale","OP_Lidochka1","OP_Lidochka2"]
 
-mean_spectra(tr_lst,clf)
+mean_spectra(tr_lst,clf,"Russian Light",FileNameOut)
 
