@@ -180,7 +180,7 @@ def an_data_use(Filename,clf):
    return f0_sm_m_l,harm_m_l,mfcc_m_l
 
 #Mean spectra in bark-intervals
-def mean_spectra(tr_lst,clf,label,FileNameOut):
+def mean_spectra(tr_lst,clf,label,FileNameOut,FileNameOutMFCC):
   harm_m=np.zeros((my_c.nBarkband,my_c.nHarmonics))
   cnt_m=np.zeros(my_c.nBarkband)
   mfcc_m=np.zeros((my_c.nBarkband,my_c.numberMFCC))
@@ -222,7 +222,6 @@ def mean_spectra(tr_lst,clf,label,FileNameOut):
             clr='black'
   print "--------"
 
-  fp=open(FileNameOut,"a")
 
   marg_m=[]
   marg_d=[]
@@ -230,6 +229,7 @@ def mean_spectra(tr_lst,clf,label,FileNameOut):
     marg_m=np.append(marg_m,(my_c.marg[i]+my_c.marg[i+1])/2.0)
     marg_d=np.append(marg_d,my_c.marg[i+1]-my_c.marg[i])
 
+  fp=open(FileNameOut,"a")
 
   for i_m in range(5,my_c.nBarkband):
         if i_m==5:
@@ -264,6 +264,8 @@ def mean_spectra(tr_lst,clf,label,FileNameOut):
   plt.show()
   fp.close()
 
+  fp=open(FileNameOutMFCC,"a")
+
   for i_m in range(5,my_c.nBarkband):
         if i_m==5:
             clr='red'
@@ -285,7 +287,14 @@ def mean_spectra(tr_lst,clf,label,FileNameOut):
             mfcc_m[i_m]=mfcc_m[i_m]/cnt_m[i_m]
             plt.plot(np.arange(my_c.numberMFCC-1)+2,mfcc_m[i_m,1:],color=clr)
 
+            for i_mfcc in range(1,my_c.numberMFCC):
+               fp.write(label+"\t"+str(i_m)+"\t"+\
+                  get_score(marg_m[i_m])[0]+"\t"+\
+                  str(marg_m[i_m])+"\t"+str(i_mfcc+1)+"\t"+\
+                  str(mfcc_m[i_m,i_mfcc])+"\n")
+
   plt.show()
+  fp.close()
 
 my_c=my_cons()
 
@@ -296,17 +305,22 @@ fp=open(FileNameOut,"w")
 fp.write("label\tnumber\tpitch\tfrequency_0\tfrequency\tharmonic\n")
 fp.close()
 
+FileNameOutMFCC=my_c.dir_data+"mfcc.dat"
+fp=open(FileNameOutMFCC,"w")
+fp.write("label\tnumber\tpitch\tfrequency_0\tn_mfcc\tmfcc\n")
+fp.close()
+
 tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni",\
     "OP_Ah_non_potrian","OP_Merce_dilette","OP_Nachtigall","OP_Son_Vergin",\
     "OP_O_legere_hirondelle","OP_Spiel_ich","OP_O_Rendetemi",
     "OP_Villanelle","OP_Ouvre_ton_coer"]
 
-mean_spectra(tr_lst,clf,"Arabesque",FileNameOut)
+mean_spectra(tr_lst,clf,"Arabesque",FileNameOut,FileNameOutMFCC)
 
 tr_lst=["OP_Ludmila","OP_Shemahanskaya_zarica","OP_Snegurochka",\
    "OP_Volhova","OP_Zarskaya_nevesta","OP_Plenivshis_rozoj",\
     "OP_Eshchyo_v_polyakh","OP_Vocalise","OP_Ne_poy","OP_Zdes_khorosho",\
     "OP_Nightingale","OP_Lidochka1","OP_Lidochka2"]
 
-mean_spectra(tr_lst,clf,"Russian Light",FileNameOut)
+mean_spectra(tr_lst,clf,"Russian Light",FileNameOut,FileNameOutMFCC)
 
