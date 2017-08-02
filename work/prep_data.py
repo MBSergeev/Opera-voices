@@ -121,8 +121,13 @@ def write_head(outputFilename):
 #outputFile="OP_Ouvre_ton_coer"
 #outputFile="OP_Villanelle"
 #outputFile="OP_Spiel_ich"
-outputFile="OP_Ludmila"
-outputFile="OP_Shemahanskaya_zarica"
+#outputFile="OP_Ludmila"
+#outputFile="OP_Shemahanskaya_zarica"
+#outputFile="OP_Snegurochka"
+#outputFile="OP_Volhova"
+#outputFile="OP_Zarskaya_nevesta"
+#outputFile="OP_Plenivshis_rozoj"
+outputFile="OP_Eshchyo_v_polyakh"
 
 my_c= my_cons()
 

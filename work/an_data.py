@@ -245,7 +245,7 @@ def mean_spectra(tr_lst,clf):
             clr='violet'
         else:
             clr='black'
-        if cnt_m[i_m]>0:
+        if cnt_m[i_m]>1:
             print i_m,clr,marg_m[i_m],int(cnt_m[i_m]),get_score(marg_m[i_m])[0]
             harm_m[i_m]=harm_m[i_m]/cnt_m[i_m]
             plt.plot((np.arange(my_c.nHarmonics)+1)*marg_m[i_m],harm_m[i_m],color=clr)
@@ -270,7 +270,7 @@ def mean_spectra(tr_lst,clf):
             clr='violet'
         else:
             clr='black'
-        if cnt_m[i_m]>0:
+        if cnt_m[i_m]>1:
             mfcc_m[i_m]=mfcc_m[i_m]/cnt_m[i_m]
             plt.plot(np.arange(my_c.numberMFCC-1)+2,mfcc_m[i_m,1:],color=clr)
 
@@ -283,8 +283,9 @@ clf=an_data_learn()
 #tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni","OP_Ah_non_potrian","OP_Merce_dilette","OP_Nachtigall","OP_Son_Vergin",\
 #   "OP_O_legere_hirondelle","OP_Spiel_ich","OP_O_Rendetemi","OP_Villanelle","OP_Ouvre_ton_coer"]
 
-#tr_lst=["OP_Ludmila"]
-tr_lst=["OP_Shemahanskaya_zarica"]
+tr_lst=["OP_Ludmila","OP_Shemahanskaya_zarica","OP_Snegurochka",\
+   "OP_Volhova","OP_Zarskaya_nevesta","OP_Plenivshis_rozoj",\
+    "OP_Eshchyo_v_polyakh"]
 
 mean_spectra(tr_lst,clf)
 
