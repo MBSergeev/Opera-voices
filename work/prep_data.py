@@ -53,7 +53,9 @@ def harm_anal(dir_in_sound,dir_out_sound,inputFilename,outputFilename):
           frequencies[i]=frequencies[0]*(i+1)
       spect1=np.zeros(spect.shape)
       for i in range(len(magnitudes)):
-          spect1[int(frequencies[i]*my_c.frameSize/my_c.sampleRate)]=10**(magnitudes[i]/20)
+          ind=int(frequencies[i]*my_c.frameSize/my_c.sampleRate)
+          if ind<spect.shape[0]:
+            spect1[ind]=10**(magnitudes[i]/20)
       barkbands1=bb(es.array(spect1))  
       barkbands=bb(es.array(spect)) 
       mfcc_bands,mfcc_coeffs=mfcc(spect)
@@ -108,6 +110,7 @@ def write_head(outputFilename):
    fp.write("\n")
    fp.close()
 
+# Arabesque
 
 #outputFile="OP_Se_in_ciel"
 #outputFile="OP_Crudele"
@@ -121,13 +124,22 @@ def write_head(outputFilename):
 #outputFile="OP_Ouvre_ton_coer"
 #outputFile="OP_Villanelle"
 #outputFile="OP_Spiel_ich"
+
+# Russian Light
+
 #outputFile="OP_Ludmila"
 #outputFile="OP_Shemahanskaya_zarica"
 #outputFile="OP_Snegurochka"
 #outputFile="OP_Volhova"
 #outputFile="OP_Zarskaya_nevesta"
 #outputFile="OP_Plenivshis_rozoj"
-outputFile="OP_Eshchyo_v_polyakh"
+#outputFile="OP_Eshchyo_v_polyakh"
+#outputFile="OP_Vocalise"
+#outputFile="OP_Ne_poy"
+#outputFile="OP_Zdes_khorosho"
+#outputFile="OP_Nightingale"
+#outputFile="OP_Lidochka1"
+outputFile="OP_Lidochka2"
 
 my_c= my_cons()
 

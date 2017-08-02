@@ -280,12 +280,17 @@ my_c=my_cons()
 
 clf=an_data_learn()
 
-#tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni","OP_Ah_non_potrian","OP_Merce_dilette","OP_Nachtigall","OP_Son_Vergin",\
-#   "OP_O_legere_hirondelle","OP_Spiel_ich","OP_O_Rendetemi","OP_Villanelle","OP_Ouvre_ton_coer"]
+tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni",\
+    "OP_Ah_non_potrian","OP_Merce_dilette","OP_Nachtigall","OP_Son_Vergin",\
+    "OP_O_legere_hirondelle","OP_Spiel_ich","OP_O_Rendetemi",
+    "OP_Villanelle","OP_Ouvre_ton_coer"]
+
+mean_spectra(tr_lst,clf)
 
 tr_lst=["OP_Ludmila","OP_Shemahanskaya_zarica","OP_Snegurochka",\
    "OP_Volhova","OP_Zarskaya_nevesta","OP_Plenivshis_rozoj",\
-    "OP_Eshchyo_v_polyakh"]
+    "OP_Eshchyo_v_polyakh","OP_Vocalise","OP_Ne_poy","OP_Zdes_khorosho",\
+    "OP_Nightingale","OP_Lidochka1","OP_Lidochka2"]
 
 mean_spectra(tr_lst,clf)
 
