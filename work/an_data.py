@@ -208,8 +208,7 @@ def mean_spectra(tr_lst,clf,label,FileNameOut,FileNameOutMFCC):
             clr='violet'
         else:
             clr='black'
-        if i_m>=8:
-           plt.plot(f0[i]*(np.arange(my_c.nHarmonics)+1),harm[i],color=clr)
+#        plt.plot(f0[i]*(np.arange(my_c.nHarmonics)+1),harm[i],color=clr)
 
         harm_s=harm_m[i_m-1]
         harm_s+=harm[i]
@@ -223,8 +222,8 @@ def mean_spectra(tr_lst,clf,label,FileNameOut,FileNameOutMFCC):
 
 
   print "--------"
-  plt.xlim((0,5000))
-  plt.show()
+#  plt.xlim((0,5000))
+#  plt.show()
 
 
   marg_m=[]
@@ -320,7 +319,7 @@ tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni",\
     "OP_Villanelle","OP_Ouvre_ton_coer"]
 
 #mean_spectra(tr_lst,clf,"AN_Adina",FileNameOut,FileNameOutMFCC)
-mean_spectra(tr_lst[-3:-2],clf,"Arabesque",FileNameOut,FileNameOutMFCC)
+mean_spectra(tr_lst,clf,"Arabesque",FileNameOut,FileNameOutMFCC)
 
 
 #tr_lst=["OP_Ludmila","OP_Shemahanskaya_zarica","OP_Snegurochka",\
@@ -329,4 +328,9 @@ mean_spectra(tr_lst[-3:-2],clf,"Arabesque",FileNameOut,FileNameOutMFCC)
 #    "OP_Nightingale","OP_Lidochka1","OP_Lidochka2"]
 
 #mean_spectra(tr_lst,clf,"Russian Light",FileNameOut,FileNameOutMFCC)
+
+tr_lst=["OP_Olympia","OP_Caro_nome","OP_Rusalka","OP_Doretta","OP_Otello",\
+  "OP_Manon","OP_Mein_Herr_Marquis","OP_Non_si_da","OP_Linda","OP_Prendi_per_me","OP_Norina",\
+   "OP_Regnava_nel_silenzio"]
+mean_spectra(tr_lst,clf,"Bellezza del canto",FileNameOut,FileNameOutMFCC)
 
