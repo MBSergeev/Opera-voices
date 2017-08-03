@@ -112,5 +112,7 @@ clf=an_data_learn()
 #an_data_use("OP_Zdes_khorosho",clf)
 #an_data_use("OP_Nightingale",clf)
 #an_data_use("OP_Lidochka1",clf)
-an_data_use("OP_Lidochka2",clf)
+#an_data_use("OP_Lidochka2",clf)
+#an_data_use("OP_Adina",clf)
+an_data_use("AN_Adina",clf)
 

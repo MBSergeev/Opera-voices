@@ -139,7 +139,11 @@ def write_head(outputFilename):
 #outputFile="OP_Zdes_khorosho"
 #outputFile="OP_Nightingale"
 #outputFile="OP_Lidochka1"
-outputFile="OP_Lidochka2"
+#outputFile="OP_Lidochka2"
+
+#Adina
+#outputFile="OP_Adina"
+outputFile="AN_Adina"
 
 my_c= my_cons()
 
