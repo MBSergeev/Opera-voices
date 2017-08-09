@@ -93,7 +93,7 @@ def an_data_use(Filename,clf,all_data=False):
 my_c=my_cons()
 
 
-clf=an_data_learn()
+clf=an_data_learn("OP_Regnava_nel_silenzio.dat",21,36)
 #an_data_use("OP_Se_in_ciel",clf)
 #an_data_use("OP_Se_in_ciel",clf,True)
 # Write all sound
@@ -117,7 +117,7 @@ clf=an_data_learn()
 #an_data_use("AN_Adina",clf)
 
 #an_data_use("OP_Olympia",clf)
-#an_data_use("OP_Caro_nome",clf)
+an_data_use("OP_Caro_nome",clf)
 #an_data_use("OP_Rusalka",clf)
 #an_data_use("OP_Doretta",clf)
 #an_data_use("OP_Otello",clf)
@@ -125,5 +125,5 @@ clf=an_data_learn()
 #an_data_use("OP_Linda",clf)
 #an_data_use("OP_Prendi_per_me",clf)
 #an_data_use("OP_Norina",clf)
-an_data_use("OP_Regnava_nel_silenzio",clf)
+#an_data_use("OP_Regnava_nel_silenzio",clf)
 

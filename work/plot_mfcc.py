@@ -23,7 +23,7 @@ for i_m in range(5,11):
         else:
             clr='black'
 
-        for lbl in ["Arabesque","Russian Light"]:
+        for lbl in ["Arabesque","Bellezza del canto"]:
            sel_data=data[(data.loc[:,"label"]==lbl) & \
              (data.loc[:,"number"]==i_m) ]
 

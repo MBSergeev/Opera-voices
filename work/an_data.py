@@ -332,5 +332,8 @@ mean_spectra(tr_lst,clf,"Arabesque",FileNameOut,FileNameOutMFCC)
 tr_lst=["OP_Olympia","OP_Caro_nome","OP_Rusalka","OP_Doretta","OP_Otello",\
   "OP_Manon","OP_Mein_Herr_Marquis","OP_Non_si_da","OP_Linda","OP_Prendi_per_me","OP_Norina",\
    "OP_Regnava_nel_silenzio"]
+
+clf=an_data_learn("OP_Regnava_nel_silenzio.dat",21,36)
+
 mean_spectra(tr_lst,clf,"Bellezza del canto",FileNameOut,FileNameOutMFCC)
 
