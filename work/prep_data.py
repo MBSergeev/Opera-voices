@@ -168,7 +168,10 @@ def write_head(outputFilename):
 #outputFile="AN_Norma"
 #outputFile="AN_Rusalka"
 #outputFile="AN_Giuditta"
-outputFile="AN_Mimi"
+#outputFile="AN_Mimi"
+#outputFile="AN_Solvejgs"
+#outputFile="AN_Addio_del_passato"
+outputFile="AN_Oh_quante_volte"
 
 my_c= my_cons()
 

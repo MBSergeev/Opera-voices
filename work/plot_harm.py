@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 data=pd.read_table("../data/harm.dat")
 
-for i_m in range(5,11):
+#for i_m in range(5,10):
+for i_m in range(6,7):
         if i_m==5:
             clr='red'
         elif i_m==6:
@@ -23,14 +24,19 @@ for i_m in range(5,11):
         else:
             clr='black'
 
-        for lbl in ["Arabesque","Bellezza del canto"]:
+        for lbl in ["Arabesque","Anna Netrebko Gold","Russian Light","Bellezza del canto"]:
            sel_data=data[(data.loc[:,"label"]==lbl) & \
              (data.loc[:,"number"]==i_m) ]
 
+           ls="-"
            if lbl=="Arabesque":
-                ls="-"
-           else:
-                ls="--"
+               clr="b" 
+           elif lbl=="Russian Light":
+               clr="g" 
+           elif lbl=="Bellezza del canto":
+               clr="violet" 
+           elif lbl=="Anna Netrebko Gold":
+               clr="r" 
 
            plt.plot(sel_data.loc[:,"frequency"],sel_data.loc[:,"harmonic"],
               color=clr,linestyle=ls)
