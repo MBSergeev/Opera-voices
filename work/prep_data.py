@@ -157,11 +157,22 @@ def write_head(outputFilename):
 #outputFile="OP_Linda"
 #outputFile="OP_Prendi_per_me"
 #outputFile="OP_Norina"
-outputFile="OP_Regnava_nel_silenzio"
+#outputFile="OP_Regnava_nel_silenzio"
+
+# Anna Netrebko Gold
+
+#outputFile="AN_Lauretta"
+#outputFile="AN_Musetta"
+#outputFile="AN_Deh_Vieni"
+#outputFile="AN_Ardon_gli_incensi"
+#outputFile="AN_Norma"
+#outputFile="AN_Rusalka"
+#outputFile="AN_Giuditta"
+outputFile="AN_Mimi"
 
 my_c= my_cons()
 
 write_head(my_c.dir_data+outputFile+".dat")
     
-#harm_anal(my_c.dir_in_sound,my_c.dir_out_sound,outputFile+".flac",my_c.dir_data+outputFile+".dat")
-harm_anal(my_c.dir_in_sound,my_c.dir_out_sound,outputFile+".mp3",my_c.dir_data+outputFile+".dat")
+harm_anal(my_c.dir_in_sound,my_c.dir_out_sound,outputFile+".flac",my_c.dir_data+outputFile+".dat")
+#harm_anal(my_c.dir_in_sound,my_c.dir_out_sound,outputFile+".mp3",my_c.dir_data+outputFile+".dat")

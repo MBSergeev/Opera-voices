@@ -301,7 +301,7 @@ def mean_spectra(tr_lst,clf,label,FileNameOut,FileNameOutMFCC):
 
 my_c=my_cons()
 
-clf=an_data_learn()
+#clf=an_data_learn()
 
 FileNameOut=my_c.dir_data+"harm.dat"
 fp=open(FileNameOut,"w")
@@ -319,13 +319,13 @@ tr_lst=["OP_Se_in_ciel","OP_Crudele","OP_Bacio","OP_Deh_Vieni",\
     "OP_Villanelle","OP_Ouvre_ton_coer"]
 
 #mean_spectra(tr_lst,clf,"AN_Adina",FileNameOut,FileNameOutMFCC)
-mean_spectra(tr_lst,clf,"Arabesque",FileNameOut,FileNameOutMFCC)
+#mean_spectra(tr_lst,clf,"Arabesque",FileNameOut,FileNameOutMFCC)
 
 
-#tr_lst=["OP_Ludmila","OP_Shemahanskaya_zarica","OP_Snegurochka",\
-#   "OP_Volhova","OP_Zarskaya_nevesta","OP_Plenivshis_rozoj",\
-#    "OP_Eshchyo_v_polyakh","OP_Vocalise","OP_Ne_poy","OP_Zdes_khorosho",\
-#    "OP_Nightingale","OP_Lidochka1","OP_Lidochka2"]
+tr_lst=["OP_Ludmila","OP_Shemahanskaya_zarica","OP_Snegurochka",\
+   "OP_Volhova","OP_Zarskaya_nevesta","OP_Plenivshis_rozoj",\
+    "OP_Eshchyo_v_polyakh","OP_Vocalise","OP_Ne_poy","OP_Zdes_khorosho",\
+    "OP_Nightingale","OP_Lidochka1","OP_Lidochka2"]
 
 #mean_spectra(tr_lst,clf,"Russian Light",FileNameOut,FileNameOutMFCC)
 
@@ -333,7 +333,12 @@ tr_lst=["OP_Olympia","OP_Caro_nome","OP_Rusalka","OP_Doretta","OP_Otello",\
   "OP_Manon","OP_Mein_Herr_Marquis","OP_Non_si_da","OP_Linda","OP_Prendi_per_me","OP_Norina",\
    "OP_Regnava_nel_silenzio"]
 
-clf=an_data_learn("OP_Regnava_nel_silenzio.dat",21,36)
+#clf=an_data_learn("OP_Regnava_nel_silenzio.dat",21,36)
+clf=an_data_learn()
 
-mean_spectra(tr_lst,clf,"Bellezza del canto",FileNameOut,FileNameOutMFCC)
+#mean_spectra(tr_lst,clf,"Bellezza del canto",FileNameOut,FileNameOutMFCC)
+
+tr_lst=["AN_Lauretta","AN_Musetta","AN_Deh_Vieni","AN_Ardon_gli_incensi","AN_Norma","AN_Rusalka","AN_Giuditta","AN_Mimi"]
+
+mean_spectra(tr_lst[7:],clf,"Anna Netrebko Gold",FileNameOut,FileNameOutMFCC)
 
