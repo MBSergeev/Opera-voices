@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 
 data=pd.read_table("../data/harm.dat")
 
-#for i_m in range(5,10):
-for i_m in range(6,7):
+for i_m in range(5,10):
         if i_m==5:
             clr='red'
         elif i_m==6:
