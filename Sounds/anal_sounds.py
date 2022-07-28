@@ -1,3 +1,4 @@
+from statistics import harmonic_mean
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,6 +15,16 @@ data=data.assign(Harm3=lambda x: x.nHarm_3-x.nHarm_1)
 data=data.assign(Harm4=lambda x: x.nHarm_4-x.nHarm_1)
 data=data.assign(Harm5=lambda x: x.nHarm_5-x.nHarm_1)
 data=data.assign(Harm6=lambda x: x.nHarm_6-x.nHarm_1)
+data=data.assign(Harm7=lambda x: x.nHarm_7-x.nHarm_1)
+data=data.assign(Harm8=lambda x: x.nHarm_8-x.nHarm_1)
+data=data.assign(Harm9=lambda x: x.nHarm_9-x.nHarm_1)
+data=data.assign(Harm10=lambda x: x.nHarm_10-x.nHarm_1)
+data=data.assign(Harm11=lambda x: x.nHarm_11-x.nHarm_1)
+data=data.assign(Harm12=lambda x: x.nHarm_12-x.nHarm_1)
+data=data.assign(Harm13=lambda x: x.nHarm_13-x.nHarm_1)
+data=data.assign(Harm14=lambda x: x.nHarm_14-x.nHarm_1)
+data=data.assign(Harm15=lambda x: x.nHarm_15-x.nHarm_1)
+
 
 
 data_s1=data[data.voice=="Soprano1"]
@@ -28,6 +39,9 @@ data_t2=data[data.voice=="Tenor2"]
 data_b1=data[data.voice=="Baritone1"]
 data_b2=data[data.voice=="Baritone2"]
 """
+
+# зависимость частоты от ноты
+
 plt.scatter(data_s1["n"],data_s1["fr0_mean"],color="r")
 plt.scatter(data_s2["n"],data_s2["fr0_mean"],color="orange")
 plt.scatter(data_s3["n"],data_s3["fr0_mean"],color="yellow")
@@ -47,6 +61,7 @@ plt.show()
 """
 
 """
+# зависимость гармоник для разных гласных
 
 data_s1a=data_s1[data_s1.sound=="a"]
 data_s1u=data_s1[data_s1.sound=="u"]
@@ -63,6 +78,8 @@ plt.scatter(data_s1e["Harm2"],data_s1e["Harm4"],color="orange")
 plt.show()
 
 """
+"""
+# логистическая регрессия - гласная от гармоник и частоты
 
 data_s1au=data_s1.loc[(data_s1.sound=="a") | (data_s1.sound=="u")]
 
@@ -80,3 +97,42 @@ y_pr=clf.predict(X)
 
 print(y)
 print(y_pr)
+
+"""
+# спектр одной ноты для различных гласных
+
+for v in ["a","o","e","u","i"]:
+    data_n=data[(data.voice=="Soprano1") & (data.sound==v) & (data.n==10)]
+
+    harm=[]
+    harm=np.append(harm,0.0)
+    harm=np.append(harm,data_n.Harm2)
+    harm=np.append(harm,data_n.Harm3)
+    harm=np.append(harm,data_n.Harm4)
+    harm=np.append(harm,data_n.Harm5)
+    harm=np.append(harm,data_n.Harm6)
+    harm=np.append(harm,data_n.Harm7)
+    harm=np.append(harm,data_n.Harm8)
+    harm=np.append(harm,data_n.Harm9)
+    harm=np.append(harm,data_n.Harm10)
+    harm=np.append(harm,data_n.Harm11)
+    harm=np.append(harm,data_n.Harm12)
+    harm=np.append(harm,data_n.Harm13)
+    harm=np.append(harm,data_n.Harm14)
+    harm=np.append(harm,data_n.Harm15)
+
+    fr=np.arange(1,16)*data_n.fr0_mean.to_numpy().astype(float)
+
+    if v=="a":
+        col="red"
+    elif v=="o":
+        col="orange"
+    elif v=="e":
+        col="yellow"        
+    elif v=="u":
+        col="green"
+    elif v=="i":
+        col="lightblue"   
+
+    plt.plot(fr,harm,color=col)
+plt.show()
