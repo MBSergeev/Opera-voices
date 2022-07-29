@@ -6,7 +6,7 @@ from utils import smooth
 import sys
 
 from sklearn.linear_model import LogisticRegression
-
+from sklearn.metrics import accuracy_score
 
 data=pd.read_table("Voices.dat")
 
@@ -99,6 +99,8 @@ print(y)
 print(y_pr)
 
 """
+
+"""
 # спектр одной ноты для различных гласных
 
 for v in ["a","o","e","u","i"]:
@@ -121,7 +123,7 @@ for v in ["a","o","e","u","i"]:
     harm=np.append(harm,data_n.Harm14)
     harm=np.append(harm,data_n.Harm15)
 
-    fr=np.arange(1,16)*data_n.fr0_mean.to_numpy().astype(float)
+    fr=np.arange(1,11)*data_n.fr0_mean.to_numpy().astype(float)
 
     if v=="a":
         col="red"
@@ -136,3 +138,29 @@ for v in ["a","o","e","u","i"]:
 
     plt.plot(fr,harm,color=col)
 plt.show()
+
+"""
+
+
+data_n=data_m4.assign(log_fr=lambda x: np.log(x.fr0_mean))
+
+#lst=["log_fr"]
+lst=["fr0_mean"]
+#lst=[]
+for i in range(2,16):
+    lst.append("Harm"+str(i))
+
+X=data_n[lst].to_numpy()
+
+y=data_n["sound"].to_numpy()
+
+#y=(y=="a").astype(int)
+
+clf = LogisticRegression(random_state=0,max_iter=1000,multi_class="auto").fit(X, y)
+
+y_pr=clf.predict(X)
+print(y)
+print(y_pr)
+
+print(accuracy_score(y,y_pr))
+
