@@ -1,8 +1,6 @@
-from statistics import harmonic_mean
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import smooth
 import sys
 
 from sklearn.linear_model import LogisticRegression
@@ -100,54 +98,75 @@ print(y_pr)
 
 """
 
-"""
+
 # спектр одной ноты для различных гласных
 
-for v in ["a","o","e","u","i"]:
-    data_n=data[(data.voice=="Soprano1") & (data.sound==v) & (data.n==10)]
+sys.stdout.write("sound\tn\tf1\tf2\n")
 
-    harm=[]
-    harm=np.append(harm,0.0)
-    harm=np.append(harm,data_n.Harm2)
-    harm=np.append(harm,data_n.Harm3)
-    harm=np.append(harm,data_n.Harm4)
-    harm=np.append(harm,data_n.Harm5)
-    harm=np.append(harm,data_n.Harm6)
-    harm=np.append(harm,data_n.Harm7)
-    harm=np.append(harm,data_n.Harm8)
-    harm=np.append(harm,data_n.Harm9)
-    harm=np.append(harm,data_n.Harm10)
-    harm=np.append(harm,data_n.Harm11)
-    harm=np.append(harm,data_n.Harm12)
-    harm=np.append(harm,data_n.Harm13)
-    harm=np.append(harm,data_n.Harm14)
-    harm=np.append(harm,data_n.Harm15)
+for i in range(1,16):
+    for v in ["a","o","e","u","i"]:    
+        data_n=data[(data.voice=="Soprano1") & (data.sound==v) & (data.n==i)]
 
-    fr=np.arange(1,11)*data_n.fr0_mean.to_numpy().astype(float)
+        harm=[]
+        harm=np.append(harm,0.0)
+        harm=np.append(harm,data_n.Harm2)
+        harm=np.append(harm,data_n.Harm3)
+        harm=np.append(harm,data_n.Harm4)
+        harm=np.append(harm,data_n.Harm5)
+        harm=np.append(harm,data_n.Harm6)
+        harm=np.append(harm,data_n.Harm7)
+        harm=np.append(harm,data_n.Harm8)
+        harm=np.append(harm,data_n.Harm9)
+        harm=np.append(harm,data_n.Harm10)
+        harm=np.append(harm,data_n.Harm11)
+        harm=np.append(harm,data_n.Harm12)
+        harm=np.append(harm,data_n.Harm13)
+        harm=np.append(harm,data_n.Harm14)
+        harm=np.append(harm,data_n.Harm15)
 
-    if v=="a":
-        col="red"
-    elif v=="o":
-        col="orange"
-    elif v=="e":
-        col="yellow"        
-    elif v=="u":
-        col="green"
-    elif v=="i":
-        col="lightblue"   
 
-    plt.plot(fr,harm,color=col)
+
+        fr=np.arange(1,16)*data_n.fr0_mean.to_numpy().astype(float)
+
+# частота максимума спектра - 1 форманта
+        f1=fr[np.argmax(harm)]
+       
+        iii_l=0
+
+        for iii in range(15):
+            if fr[iii]>1500:
+                iii_l=iii
+                break
+
+# частота второго максимума спектра - 1 форманта
+        f2=fr[np.argmax(harm[iii_l:])+iii_l]
+
+        sys.stdout.write(v+"\t"+str(i)+"\t"+str(f1)+"\t"+str(f2)+"\n")
+#        print(i,f1,f2)
+
+        if v=="a":
+            col="red"
+        elif v=="o":
+            col="orange"
+        elif v=="e":
+            col="yellow"        
+        elif v=="u":
+            col="green"
+        elif v=="i":
+            col="lightblue"   
+
+        plt.plot(fr,harm,color=col)
 plt.show()
 
-"""
 
+sys.exit(0)
 
-data_n=data_m4.assign(log_fr=lambda x: np.log(x.fr0_mean))
+data_n=data_m1.assign(log_fr=lambda x: np.log(x.fr0_mean))
 
 #lst=["log_fr"]
 lst=["fr0_mean"]
 #lst=[]
-for i in range(2,16):
+for i in range(2,11):
     lst.append("Harm"+str(i))
 
 X=data_n[lst].to_numpy()
@@ -156,11 +175,16 @@ y=data_n["sound"].to_numpy()
 
 #y=(y=="a").astype(int)
 
-clf = LogisticRegression(random_state=0,max_iter=1000,multi_class="auto").fit(X, y)
+clf = LogisticRegression(random_state=0,max_iter=1000,multi_class="multinomial").fit(X, y)
 
 y_pr=clf.predict(X)
 print(y)
 print(y_pr)
 
 print(accuracy_score(y,y_pr))
+print(clf.classes_)
+print(clf.coef_)
+print(clf.intercept_)
+
+
 
