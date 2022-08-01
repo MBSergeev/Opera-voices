@@ -101,7 +101,9 @@ print(y_pr)
 
 # спектр одной ноты для различных гласных
 
-sys.stdout.write("sound\tn\tf1\tf2\n")
+sys.stdout.write("sound\tn\tf1\tf2\tfr\n")
+
+
 
 for i in range(1,16):
     for v in ["a","o","e","u","i"]:    
@@ -141,7 +143,7 @@ for i in range(1,16):
 # частота второго максимума спектра - 1 форманта
         f2=fr[np.argmax(harm[iii_l:])+iii_l]
 
-        sys.stdout.write(v+"\t"+str(i)+"\t"+str(f1)+"\t"+str(f2)+"\n")
+        sys.stdout.write(v+"\t"+str(i)+"\t"+str(f1)+"\t"+str(f2)+"\t"+str(fr[0])+"\n")
 #        print(i,f1,f2)
 
         if v=="a":
